@@ -1,2 +1,6 @@
-# palette_uebergeben
-Gruppe 12 - Palettenübergabe
+# Palette übergeben
+
+### Projekt der Gruppe 12
+
+
+Readme folgt.
