@@ -8,7 +8,15 @@
 
 #TODO Methode zum scannen nach entgegenkommenden Fahrzeugen importieren (Botlib oder paletteAblegen.py)
 #TODO testen ob Fahrzeuge mit Palette auch erkannt werden
+from botlib.bot import Bot
+import time
 
+bot = None
+    
+def initialisiereRoboter():
+    global bot
+    bot = Bot()
+    bot.calibrate()
 
 def entgegenkommendesFahrzeugMitPaletteErkannt():
     #TODO testen der Funktion
@@ -29,4 +37,16 @@ def paletteAnfahren():
 
 def paletteAufheben():
     #TODO realisieren der kompletten Funktion, oder einbinden von der Botlib
-    pass
+    bot._forklift.to_pickup_mode()
+    time.sleep(2)
+    bot.drive_steer(0)
+    bot.drive_power(30)
+    time.sleep(1)
+    bot.drive_power(0)
+    bot._forklift.to_carry_mode()
+    
+def test():
+    initialisiereRoboter()
+    time.sleep(3)
+    paletteAufheben()
+test()

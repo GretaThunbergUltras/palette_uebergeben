@@ -30,7 +30,13 @@ def entgegenkommendesFahrzeugOhnePaletteErkannt():
 
 def paletteAbsetzen():
     #TODO realisieren der kompletten Funktion, oder einbinden von der Botlib
-    pass
+    bot._forklift.to_pickup_mode()
+    time.sleep(3)
+    bot.drive_steer(0)
+    bot.drive_power(-30)
+    time.sleep(1)
+    bot.drive_power(0)
+    bot._forklift.to_carry_mode()
 
 def umdrehen():
     #TODO realisieren der kompletten Funktion, oder einbinden von der Botlib
@@ -78,5 +84,6 @@ def nachrichtAnFahrzeugZwei():
 
 def test():
     initialisiereRoboter()
-    umdrehen()
+    time.sleep(3)
+    paletteAbsetzen()
 test()
