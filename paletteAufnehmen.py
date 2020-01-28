@@ -6,37 +6,52 @@
 
 '''
 
-#TODO Methode zum scannen nach entgegenkommenden Fahrzeugen importieren (Botlib oder paletteAblegen.py)
-#TODO testen ob Fahrzeuge mit Palette auch erkannt werden
 from botlib.bot import Bot
 import time
+from paletteAblegen import umdrehen, scanNachEntgegenkommendemFahrzeug, initialisiereRoboter
 
 bot = None
     
-def initialisiereRoboter():
-    global bot
-    bot = Bot()
-    bot.calibrate()
 
 def entgegenkommendesFahrzeugMitPaletteErkannt():
+    '''
+    Routine die ausgeführt werden sollte, wenn ein entgegenkommendes Fahrzeug mit Palette erkannt wurde:
+    - Wartet auf Nachricht des ersten Fahrzeugs
+    - Nimmt Palette auf
+    - Dreht um
+    '''
     #TODO testen der Funktion
+    #TODO scanNachEntgegenkommendemFahrzeug abändern dass es Fahrzeuge mit Paletten erkennt.
     wartenAufNachrichtVonErstemFahrzeug()
     paletteAnfahren()
     paletteAufheben()
-    #TODO Methode zum umdrehen importieren (Botlib oder paletteAblegen.py)
+    umdrehen()
     pass
 
+
 def wartenAufNachrichtVonErstemFahrzeug():
+    '''
+    Subsribes einen bestimmten Channel auf dem das erste Fahrzeug seine Nachricht sendet wenn es fertig ist.
+    Wartet so lange, bis es die Nachricht erhält.
+    Funktioniert mit MQTT
+    '''
     #TODO realisieren der kompletten Funktion
     #Nachfrage möglich bei: Mercedes, Kris
     pass
 
 def paletteAnfahren():
+    '''
+    Erkennt die Palette und fährt so an sie heran, dass man nur noch eine bestimmte Zeit geradeaus fahren muss,
+    damit die Gabel unter die Palette fährt.
+    '''
     #TODO realisieren der kompletten Funktion
     pass
 
 def paletteAufheben():
-    #TODO realisieren der kompletten Funktion, oder einbinden von der Botlib
+    '''
+    Hebt eine Palette, die auf dem Boden steht, autonom auf.
+    Nimmt an, dass das Fahrzeug kurz vor der Palette steht.
+    '''
     bot._forklift.to_pickup_mode()
     time.sleep(2)
     bot.drive_steer(0)
@@ -45,8 +60,10 @@ def paletteAufheben():
     bot.drive_power(0)
     bot._forklift.to_carry_mode()
     
-def test():
+def main():
     initialisiereRoboter()
     time.sleep(3)
     paletteAufheben()
-test()
+
+if __name__ == "__main__":
+    main()
