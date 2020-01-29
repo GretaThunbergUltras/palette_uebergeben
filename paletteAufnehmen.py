@@ -8,10 +8,19 @@
 
 from botlib.bot import Bot
 import time
-from paletteAblegen import umdrehen, scanNachEntgegenkommendemFahrzeug, initialisiereRoboter
+from paletteAblegen import scanNachEntgegenkommendemFahrzeug
 
 bot = None
     
+
+def initialisiereRoboter():
+    '''
+    Kreiert und Konfiguriert eine Bot() Instanz, so dass die angeschlossenen Geräte einfach
+    angesprochen werden können.
+    '''
+    global bot
+    bot = Bot()
+    bot.calibrate()
 
 def entgegenkommendesFahrzeugMitPaletteErkannt():
     '''
@@ -59,6 +68,31 @@ def paletteAufheben():
     time.sleep(1)
     bot.drive_power(0)
     bot._forklift.to_carry_mode()
+
+def umdrehen():
+    '''
+    Roboter macht eine Dreipunktwende nach rechts hinten.
+    Funktion ist NICHT kollisionsfrei.
+    Basiert darauf dass alle Motoren zum Fahren unter allen Situationen gleich schnell laufen und
+    einen gleichen gleichen Wendekreis haben.
+    '''
+    bot.drive_steer(1)
+    time.sleep(1)
+    bot.drive_power(-30)
+    time.sleep(3.52)
+    bot.drive_power(0)
+    time.sleep(1)
+    bot.drive_steer(0)
+    time.sleep(1)
+    bot.drive_steer(-1)
+    bot.drive_power(30)
+    time.sleep(3.52)
+    bot.drive_power(0)
+    bot.drive_steer(0)
+    time.sleep(1)
+    bot.drive_power(20)
+    time.sleep(1)
+    bot.drive_power(0)
     
 def main():
     initialisiereRoboter()
