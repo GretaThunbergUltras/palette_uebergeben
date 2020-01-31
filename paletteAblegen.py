@@ -92,15 +92,16 @@ def nachrichtAnFahrzeugZwei():
     dass Fahrzeug 1 fertig ist und Fahrzeug 2 anfangen kann.
     Funktioniert mit MQTT
     '''
-    #TODO realisieren der kompletten Funktion
+    #TODO Testen
     bot.setup_broker()
-    bot._broker.send_message("absetzchannel", "abgesetzt")
+    bot._broker.send_message("channelGruppe12", "abgesetzt")
 
 def main():
     initialisiereRoboter()
     time.sleep(3)
     paletteAbsetzen()
     umdrehen()
+    nachrichtAnFahrzeugZwei()
 
 if __name__ == "__main__":
     main()
