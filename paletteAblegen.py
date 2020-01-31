@@ -93,9 +93,8 @@ def nachrichtAnFahrzeugZwei():
     Funktioniert mit MQTT
     '''
     #TODO realisieren der kompletten Funktion
-    #TODO Gedanken über implementation mit MQTT machen
-    #Nachfrage möglich bei: Mercedes, Kris
-    pass
+    bot.setup_broker()
+    bot._broker.send_message("absetzchannel", "abgesetzt")
 
 def main():
     initialisiereRoboter()
