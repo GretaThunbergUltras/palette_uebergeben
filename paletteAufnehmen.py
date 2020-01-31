@@ -44,9 +44,8 @@ def wartenAufNachrichtVonErstemFahrzeug():
     Wartet so lange, bis es die Nachricht erhält.
     Funktioniert mit MQTT
     '''
-    #TODO realisieren der kompletten Funktion
-    #Nachfrage möglich bei: Mercedes, Kris
-    pass
+    #TODO aufrufen unseres Verhaltens, in: on_Message()
+    bot.setup_broker(subscriptions={'channelGruppe12': 'on_Message'})
 
 def paletteAnfahren():
     '''
