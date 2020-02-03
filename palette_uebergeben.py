@@ -1,16 +1,9 @@
-''' Code für das Fahrzeug mit der Palette
-
-    Der Code für das Fahrzeug dass anfangs die Palette trägt, das zweite, entgegenkommende
-    Fahrzeug erkennt. Dann die Palette abstellt, sich umdreht, wegfährt und das zweite
-    Fahrzeug informiert, dass es loslegen kann.
-
-'''
-
 from botlib.bot import Bot
 import time
 
 bot = None
-    
+traegtPalette = False
+nachrichtErhalten = False
 
 def initialisiereRoboter():
     '''
@@ -21,44 +14,20 @@ def initialisiereRoboter():
     bot = Bot()
     bot.calibrate()
 
-def scanNachEntgegenkommendemFahrzeug():
-    '''
-    Schaut ob ein anderes Fahrzeug entgegenkommt.
-
-    Returns:
-    True    -   Falls ein anderes Fahrzeug erkannt wurde.
-    False   -   Falls kein anderes Fahrzeug erkannt wurde.
-    '''
-    #TODO realisieren der kompletten Funktion.
-    #TODO testen ob Fahrzeuge mit Palette auch erkannt werden
-    pass
-
-def entgegenkommendesFahrzeugOhnePaletteErkannt():
-    '''
-    Routine die ausgeführt werden sollte, wenn ein entgegenkommendes Fahrzeug ohne Palette erkannt wurde:
-    - Setzt Palette ab
-    - Dreht um
-    - Benachrichtigt das zweite Fahrzeug
-    '''
-    #TODO testen der Funktion
-    paletteAbsetzen()
-    umdrehen()
-    nachrichtAnFahrzeugZwei()
-    pass
-
-
 def paletteAbsetzen():
     '''
     Roboter setzt seine Palette auf der stelle ab und fährt so weit nach hinten,
     dass seine Gabel frei ist.
     Funktion ist NICHT kollisionsfrei.
     '''
+    global traegtPalette
     bot._forklift.to_pickup_mode()
     time.sleep(3)
     bot.drive_steer(0)
     bot.drive_power(-30)
     time.sleep(1)
     bot.drive_power(0)
+    traegtPalette = False
     bot._forklift.to_carry_mode()
 
 def umdrehen():
@@ -96,12 +65,64 @@ def nachrichtAnFahrzeugZwei():
     bot.setup_broker()
     bot._broker.send_message("channelGruppe12", "abgesetzt")
 
-def main():
-    initialisiereRoboter()
-    time.sleep(3)
+def paletteUebergeben:
+    '''
+    Routine die ausgeführt wird, wenn ein anderes Fahrzeug erkannt wurde und eine
+    Palette getragen wird.
+    - Setzt Palette ab
+    - Dreht um
+    - Benachrichtigt das zweite Fahrzeug
+    '''
     paletteAbsetzen()
     umdrehen()
     nachrichtAnFahrzeugZwei()
+
+
+
+
+def onMessage(client_id, userdata, message):
+    nachricht = str(message.payload)
+    if "abgesetzt" in nachricht:
+        nachrichtErhalten = True
+
+def hörenAufNachrichtVonErstemFahrzeug():
+    '''
+    Subsribes einen bestimmten Channel auf dem das erste Fahrzeug seine Nachricht sendet wenn es fertig ist.
+    Wartet so lange, bis es die Nachricht erhält.
+    Funktioniert mit MQTT
+    '''
+    bot.setup_broker(subscriptions={'channelGruppe12': 'on_Message'})
+
+def paletteAufheben():
+    '''
+    Hebt eine Palette, die auf dem Boden steht, autonom auf.
+    Nimmt an, dass das Fahrzeug kurz vor der Palette steht.
+    '''
+    bot._forklift.to_pickup_mode()
+    time.sleep(2)
+    bot.drive_steer(0)
+    bot.drive_power(30)
+    time.sleep(1)
+    bot.drive_power(0)
+    bot._forklift.to_carry_mode()
+
+def paletteEntgegennehmen():
+    paletteAufheben()
+    umdrehen()
+
+def main():
+    initialisiereRoboter()
+    while True:
+        if True: #TODO Hier sollte ein anderes Fahrzeug erkannt werden.
+            if traegtPalette:
+                paletteUebergeben()
+            else:
+                hörenAufNachichtVonErstemFahrzeug()
+                while not nachrichtErhalten:
+                    time.sleep(1)
+                paletteEntgegennehmen()
+        else:
+            followLine #TODO tu dies
 
 if __name__ == "__main__":
     main()
