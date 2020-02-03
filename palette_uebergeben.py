@@ -2,7 +2,7 @@ from botlib.bot import Bot
 import time
 
 bot = None
-traegtPalette = False
+traegtPalette = True
 nachrichtErhalten = False
 
 def initialisiereRoboter():
@@ -22,13 +22,14 @@ def paletteAbsetzen():
     '''
     global traegtPalette
     bot._forklift.to_pickup_mode()
-    time.sleep(3)
+    time.sleep(9)
     bot.drive_steer(0)
     bot.drive_power(-30)
     time.sleep(1)
     bot.drive_power(0)
     traegtPalette = False
     bot._forklift.to_carry_mode()
+    time.sleep(9)
 
 def umdrehen():
     '''
@@ -42,9 +43,9 @@ def umdrehen():
     bot.drive_power(-30)
     time.sleep(3.52)
     bot.drive_power(0)
-    time.sleep(1)
+    time.sleep(0.5)
     bot.drive_steer(0)
-    time.sleep(1)
+    time.sleep(0.2)
     bot.drive_steer(-1)
     bot.drive_power(30)
     time.sleep(3.52)
@@ -65,7 +66,7 @@ def nachrichtAnFahrzeugZwei():
     bot.setup_broker()
     bot._broker.send_message("channelGruppe12", "abgesetzt")
 
-def paletteUebergeben:
+def paletteUebergeben():
     '''
     Routine die ausgeführt wird, wenn ein anderes Fahrzeug erkannt wurde und eine
     Palette getragen wird.
@@ -98,13 +99,16 @@ def paletteAufheben():
     Hebt eine Palette, die auf dem Boden steht, autonom auf.
     Nimmt an, dass das Fahrzeug kurz vor der Palette steht.
     '''
+    global traegtPalette
     bot._forklift.to_pickup_mode()
-    time.sleep(2)
+    time.sleep(9)
     bot.drive_steer(0)
     bot.drive_power(30)
     time.sleep(1)
     bot.drive_power(0)
     bot._forklift.to_carry_mode()
+    traegtPalette = True
+    time.sleep(9)
 
 def paletteEntgegennehmen():
     paletteAufheben()
@@ -112,6 +116,7 @@ def paletteEntgegennehmen():
 
 def main():
     initialisiereRoboter()
+    time.sleep(3)
     while True:
         if True: #TODO Hier sollte ein anderes Fahrzeug erkannt werden.
             if traegtPalette:
@@ -122,7 +127,8 @@ def main():
                     time.sleep(1)
                 paletteEntgegennehmen()
         else:
-            followLine #TODO tu dies
+            pass
+            #followLine #TODO tu dies
 
 if __name__ == "__main__":
     main()
